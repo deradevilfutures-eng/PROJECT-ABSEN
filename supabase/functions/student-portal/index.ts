@@ -10,6 +10,7 @@ const cors = {
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: cors });
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const pinPepper = Deno.env.get("PIN_PEPPER") || "";
 const db = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false } });
 const randomPin = () => {
   const a = new Uint32Array(1); crypto.getRandomValues(a);
@@ -82,7 +83,7 @@ Deno.serve(async (req) => {
       const { count: studentAttempts } = await db.from("student_login_attempts").select("id", { count: "exact", head: true }).eq("student_id", studentId).gte("attempted_at", since);
       if ((attempts || 0) >= 8 || (studentAttempts || 0) >= 30) return json({ error: "Terlalu banyak percobaan. Tunggu 15 menit lalu coba lagi." }, 429);
       const { data: account } = await db.from("student_accounts").select("pin_hash").eq("student_id", studentId).maybeSingle();
-      const ok = !!account && await bcrypt.compare(pin, account.pin_hash);
+      const ok = !!account && await bcrypt.compare(pin + pinPepper, account.pin_hash);
       await db.from("student_login_attempts").insert({ student_id: studentId, ip_fingerprint: fp, succeeded: ok });
       if (!ok) return json({ error: "Nama atau PIN tidak sesuai." }, 401);
       const { data: student } = await db.from("students").select("id,full_name").eq("id", studentId).eq("active", true).single();
@@ -123,10 +124,10 @@ Deno.serve(async (req) => {
       let pin = randomPin();
       // Prevent a duplicate PIN among currently enrolled accounts, even though a duplicate is not itself an authorization bypass.
       for (let i = 0; i < 20; i++) {
-        const hash = await bcrypt.hash(pin, 12);
+        const hash = await bcrypt.hash(pin + pinPepper, 12);
         const { data: all } = await db.from("student_accounts").select("pin_hash");
         let duplicate = false;
-        for (const a of (all || [])) if (await bcrypt.compare(pin, a.pin_hash)) { duplicate = true; break; }
+        for (const a of (all || [])) if (await bcrypt.compare(pin + pinPepper, a.pin_hash)) { duplicate = true; break; }
         if (!duplicate) {
           const { error } = await db.from("student_accounts").upsert({ student_id: studentId, pin_hash: hash, pin_changed_at: new Date().toISOString(), updated_by: user.id, updated_at: new Date().toISOString() }, { onConflict: "student_id" });
           if (error) throw error;
