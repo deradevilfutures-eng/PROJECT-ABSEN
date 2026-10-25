@@ -1,0 +1,4 @@
+[functions.student-portal]
+# Student history uses a random opaque session token rather than a Supabase JWT.
+# The function validates student tokens itself and verifies admin JWTs with auth.getUser().
+verify_jwt = false
