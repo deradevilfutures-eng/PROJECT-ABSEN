@@ -79,7 +79,8 @@ Deno.serve(async (req) => {
       const fp = await fingerprint(req);
       const since = new Date(Date.now() - 15 * 60 * 1000).toISOString();
       const { count: attempts } = await db.from("student_login_attempts").select("id", { count: "exact", head: true }).eq("student_id", studentId).eq("ip_fingerprint", fp).gte("attempted_at", since);
-      if ((attempts || 0) >= 8) return json({ error: "Terlalu banyak percobaan. Tunggu 15 menit lalu coba lagi." }, 429);
+      const { count: studentAttempts } = await db.from("student_login_attempts").select("id", { count: "exact", head: true }).eq("student_id", studentId).gte("attempted_at", since);
+      if ((attempts || 0) >= 8 || (studentAttempts || 0) >= 30) return json({ error: "Terlalu banyak percobaan. Tunggu 15 menit lalu coba lagi." }, 429);
       const { data: account } = await db.from("student_accounts").select("pin_hash").eq("student_id", studentId).maybeSingle();
       const ok = !!account && await bcrypt.compare(pin, account.pin_hash);
       await db.from("student_login_attempts").insert({ student_id: studentId, ip_fingerprint: fp, succeeded: ok });
