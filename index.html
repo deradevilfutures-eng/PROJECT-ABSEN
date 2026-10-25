@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10233f">
+<meta name="description" content="Aplikasi absensi mahasiswa STIKK AN-NUR 2 CABANG PP NURUL FALAH.">
+<title>Absensi Mahasiswa | STIKK AN-NUR 2</title>
+<style>
+:root{color-scheme:light;--navy:#10233f;--blue:#2457d6;--sky:#eaf0ff;--ink:#172338;--muted:#64748b;--line:#e2e8f0;--bg:#f4f7fb;--green:#16845b;--red:#c0392b;--amber:#a16207}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.topbar{background:var(--navy);color:#fff;padding:18px max(18px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:17px}.brand h1{font-size:17px;margin:0 0 3px}.brand p{font-size:12px;margin:0;color:#cbd5e1}.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 18px 48px}.welcome{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:22px}.welcome h2{font-size:25px;letter-spacing:-.6px;margin:0 0 7px}.welcome p{color:var(--muted);margin:0;font-size:14px}.date-chip{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 13px;color:var(--muted);font-size:13px;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px}.stat .label{color:var(--muted);font-size:12px}.stat .num{font-size:26px;font-weight:800;margin-top:8px;letter-spacing:-.7px}.stat .hint{font-size:11px;color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:4px 0 14px;margin-bottom:4px}.tab{border:1px solid var(--line);border-radius:10px;background:#fff;color:#526078;padding:10px 14px;white-space:nowrap;font-size:13px;font-weight:650}.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.panel{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;margin-bottom:16px;min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.panel h3{margin:0;font-size:16px}.sub{font-size:12px;color:var(--muted);margin-top:5px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;font-weight:650;font-size:12px;color:var(--ink)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.dark{background:var(--navy);border-color:var(--navy);color:#fff}.btn.danger{color:var(--red)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;color:#475569;font-weight:700}.field input,.field select,.field textarea,.search{width:100%;min-width:0;border:1px solid #d7dfeb;border-radius:10px;background:#fff;padding:10px 11px;outline:none;color:var(--ink)}.field input:focus,.field select:focus,.field textarea:focus,.search:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2457d61a}.field textarea{min-height:110px;resize:vertical}.search{max-width:260px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:left;padding:12px 13px;border-bottom:1px solid #edf1f6;font-size:13px}th{font-size:11px;letter-spacing:.35px;text-transform:uppercase;color:var(--muted);background:#f8fafc}tbody tr:last-child td{border-bottom:0}.num-cell{color:var(--muted);width:48px}.student-name{font-weight:700}.muted{color:var(--muted)}.pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:750}.pill.present{background:#e4f7ee;color:#117348}.pill.absent{background:#feeceb;color:#b42318}.pill.permission{background:#fff4d6;color:#8a5a00}.pill.sick{background:#eaf0ff;color:#254fb3}.status-select{border:1px solid var(--line);border-radius:8px;padding:7px;background:#fff;max-width:150px}.empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13px}.note{border-radius:12px;background:#fff7e6;border:1px solid #f4d79a;color:#704c0b;padding:12px 14px;font-size:12px;line-height:1.55;margin-bottom:16px}.login-shell{max-width:420px;margin:8vh auto;padding:18px}.login-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 18px 55px #10233f12}.login-card h2{margin:14px 0 7px}.login-card p{color:var(--muted);font-size:13px;line-height:1.55}.login-card .field{margin:18px 0}.login-card .btn{width:100%;padding:12px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#12233e;color:#fff;padding:11px 16px;border-radius:12px;box-shadow:0 10px 30px #0002;font-size:13px;z-index:10;max-width:calc(100% - 28px)}.footer{text-align:center;color:#8a96a8;font-size:11px;padding:18px}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fields{grid-template-columns:repeat(2,minmax(0,1fr))}.welcome{align-items:start;flex-direction:column}.topbar{align-items:flex-start}.top-actions{justify-content:flex-end}.wrap{padding-top:18px}.panel{padding:15px}}
+@media(max-width:480px){.topbar{padding:14px}.brand h1{font-size:14px}.brand p{max-width:220px;line-height:1.4}.logo{width:36px;height:36px}.top-actions .btn{padding:8px}.wrap{padding:15px 12px 32px}.stats{gap:8px}.stat{padding:13px}.stat .num{font-size:23px}.fields{grid-template-columns:1fr}.panel-head{align-items:flex-start;flex-direction:column}.search{max-width:none}.date-chip{white-space:normal}}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login-shell">
+  <div class="login-card">
+    <div class="logo">AN2</div>
+    <h2>Login Admin</h2>
+    <p>Absensi Mahasiswa STIKK AN-NUR 2 CABANG PP NURUL FALAH</p>
+    <div class="field"><label for="pinInput">PIN admin</label><input id="pinInput" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Masukkan PIN admin"></div>
+    <button class="btn primary" id="loginBtn">Masuk ke aplikasi</button>
+    <p style="font-size:11px;margin-top:16px">PIN awal: <b>1234</b>. Ubah melalui menu Pengaturan setelah masuk. Ini adalah pengunci sederhana di browser, bukan sistem autentikasi untuk data sensitif.</p>
+    <div id="loginError" class="sub" style="color:var(--red)"></div>
+  </div>
+</div>
+<div id="app" class="hidden">
+<header class="topbar">
+ <div class="brand"><div class="logo">AN2</div><div><h1>ABSENSI MAHASISWA</h1><p>STIKK AN-NUR 2 CABANG PP NURUL FALAH</p></div></div>
+ <div class="top-actions"><button class="btn" id="exportAllBtn">Ekspor CSV</button><button class="btn" id="logoutBtn">Keluar</button></div>
+</header>
+<main class="wrap">
+ <div class="welcome"><div><h2>Dashboard Absensi</h2><p>Kelola daftar mahasiswa, perkuliahan, dan riwayat kehadiran.</p></div><div class="date-chip" id="todayLabel"></div></div>
+ <div class="note"><b>Catatan penyimpanan:</b> Data tersimpan di browser/perangkat ini saja. Gunakan ekspor CSV sebagai cadangan rutin. Menghapus data browser, berpindah perangkat, atau memakai mode privat dapat membuat data hilang. PIN admin di aplikasi statis ini bukan keamanan tingkat server.</div>
+ <section class="stats">
+  <div class="stat"><div class="label">Total mahasiswa</div><div class="num" id="statStudents">0</div><div class="hint">Daftar mahasiswa aktif</div></div>
+  <div class="stat"><div class="label">Sesi perkuliahan</div><div class="num" id="statSessions">0</div><div class="hint">Riwayat tersimpan</div></div>
+  <div class="stat"><div class="label">Hadir pada sesi ini</div><div class="num" id="statPresent">0</div><div class="hint">Status hadir</div></div>
+  <div class="stat"><div class="label">Belum ditandai</div><div class="num" id="statPending">0</div><div class="hint">Pada sesi yang dipilih</div></div>
+ </section>
+ <nav class="tabs" aria-label="Navigasi aplikasi">
+  <button class="tab active" data-tab="attendance">Absensi</button><button class="tab" data-tab="students">Mahasiswa</button><button class="tab" data-tab="history">Riwayat</button><button class="tab" data-tab="settings">Pengaturan</button>
+ </nav>
+ <section id="attendanceTab" class="tab-page">
+  <div class="panel">
+   <div class="panel-head"><div><h3>Buat sesi perkuliahan</h3><div class="sub">Isi mata kuliah, tanggal, dan pertemuan.</div></div></div>
+   <div class="fields">
+    <div class="field"><label for="courseInput">Mata kuliah</label><input id="courseInput" placeholder="Contoh: Pengantar Manajemen"></div>
+    <div class="field"><label for="dateInput">Tanggal</label><input id="dateInput" type="date"></div>
+    <div class="field"><label for="meetingInput">Pertemuan ke-</label><input id="meetingInput" type="number" min="1" value="1"></div>
+    <div class="field"><label for="lecturerInput">Dosen (opsional)</label><input id="lecturerInput" placeholder="Nama dosen"></div>
+   </div>
+   <div class="actions"><button class="btn primary" id="newSessionBtn">Mulai / buka sesi</button><button class="btn" id="markAllBtn">Tandai semua hadir</button><button class="btn" id="saveSessionBtn">Simpan absensi</button></div>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h3>Daftar kehadiran</h3><div class="sub" id="sessionSummary">Pilih atau buat sesi untuk memulai.</div></div><input class="search" id="attendanceSearch" placeholder="Cari nama mahasiswa…"></div>
+   <div id="attendanceTable" class="table-wrap"><div class="empty">Belum ada mahasiswa. Tambahkan daftar melalui menu Mahasiswa.</div></div>
+  </div>
+ </section>
+ <section id="studentsTab" class="tab-page hidden">
+  <div class="panel">
+   <div class="panel-head"><div><h3>Tambah mahasiswa</h3><div class="sub">Masukkan nama satu per baris. Daftar otomatis diurutkan alfabetis.</div></div></div>
+   <div class="fields" style="grid-template-columns:1fr 1fr">
+    <div class="field"><label for="studentNameInput">Nama mahasiswa</label><input id="studentNameInput" placeholder="Nama lengkap mahasiswa"></div>
+    <div class="field"><label for="studentIdInput">NIM (opsional)</label><input id="studentIdInput" placeholder="Nomor induk mahasiswa"></div>
+   </div>
+   <div class="actions" style="margin-bottom:18px"><button class="btn primary" id="addStudentBtn">Tambah mahasiswa</button></div>
+   <div class="field"><label for="bulkStudents">Tambah banyak sekaligus</label><textarea id="bulkStudents" placeholder="Satu nama per baris. Opsional: NIM,Nama"></textarea></div>
+   <div class="actions" style="margin-top:10px"><button class="btn primary" id="importStudentsBtn">Impor daftar nama</button><button class="btn" id="downloadTemplateBtn">Unduh template CSV</button><label class="btn" for="studentFile" style="display:inline-flex;align-items:center">Impor file CSV<input id="studentFile" type="file" accept=".csv,.txt" class="hidden"></label></div>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h3>Daftar mahasiswa</h3><div class="sub" id="studentCountLabel">0 mahasiswa</div></div><input class="search" id="studentSearch" placeholder="Cari nama atau NIM…"></div>
+   <div id="studentsTable" class="table-wrap"></div>
+  </div>
+ </section>
+ <section id="historyTab" class="tab-page hidden">
+  <div class="panel"><div class="panel-head"><div><h3>Riwayat perkuliahan</h3><div class="sub">Sesi tersimpan dan rekap kehadiran.</div></div><button class="btn primary" id="exportHistoryBtn">Ekspor semua riwayat CSV</button></div><div id="historyTable" class="table-wrap"></div></div>
+ </section>
+ <section id="settingsTab" class="tab-page hidden">
+  <div class="panel"><h3>Pengaturan admin</h3><p class="sub">Ganti PIN lokal dan kelola cadangan data.</p>
+   <div class="fields" style="margin-top:18px">
+    <div class="field"><label for="oldPin">PIN saat ini</label><input id="oldPin" type="password" inputmode="numeric"></div>
+    <div class="field"><label for="newPin">PIN baru (minimal 4 digit)</label><input id="newPin" type="password" inputmode="numeric"></div>
+    <div class="field"><label for="confirmPin">Ulangi PIN baru</label><input id="confirmPin" type="password" inputmode="numeric"></div>
+   </div>
+   <div class="actions"><button class="btn primary" id="changePinBtn">Ubah PIN</button><button class="btn" id="backupBtn">Unduh cadangan JSON</button><label class="btn" for="restoreFile">Pulihkan cadangan JSON<input id="restoreFile" type="file" accept=".json,application/json" class="hidden"></label><button class="btn danger" id="clearDataBtn">Hapus semua data lokal</button></div>
+   <p class="sub" style="margin-top:16px">Cadangan JSON memuat daftar mahasiswa, riwayat, dan pengaturan lokal. Simpan di tempat aman. Jangan membagikan file cadangan kepada orang yang tidak berwenang.</p>
+  </div>
+ </section>
+ <div class="footer">Absensi Mahasiswa • STIKK AN-NUR 2 CABANG PP NURUL FALAH • Versi awal</div>
+</main>
+</div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+const KEY='stikk_an2_attendance_v1';
+const defaultState={pin:'1234',students:[],sessions:[],activeSessionId:null};
+let state=loadState(),activeTab='attendance',toastTimer=null;
+const $=id=>document.getElementById(id);
+function loadState(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&Array.isArray(x.students)&&Array.isArray(x.sessions)?{...defaultState,...x}:structuredClone(defaultState)}catch(e){return structuredClone(defaultState)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify('Penyimpanan browser penuh atau tidak tersedia. Ekspor cadangan data.');return false}}
+function notify(msg){const el=$('toast');el.textContent=msg;el.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.add('hidden'),3000)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function localDate(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dateText(d){if(!d)return '-';try{return new Date(d+'T12:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return d}}
+function sortedStudents(){return [...state.students].sort((a,b)=>a.name.localeCompare(b.name,'id',{sensitivity:'base'}))}
+function currentSession(){return state.sessions.find(s=>s.id===state.activeSessionId)||null}
+function statusLabel(s){return ({present:'Hadir',absent:'Alpa',permission:'Izin',sick:'Sakit',pending:'Belum ditandai'})[s]||'Belum ditandai'}
+function statusPill(s){return '<span class="pill '+esc(s)+'">'+esc(statusLabel(s))+'</span>'}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function download(name,content,type='text/csv;charset=utf-8;'){const blob=new Blob(['\ufeff',content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+function showLogin(){ $('loginScreen').classList.remove('hidden');$('app').classList.add('hidden');$('pinInput').value='';$('loginError').textContent='';}
+function showApp(){ $('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('todayLabel').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('dateInput').value=localDate();renderAll();}
+function switchTab(tab){activeTab=tab;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.tab-page').forEach(p=>p.classList.add('hidden'));$(tab+'Tab').classList.remove('hidden');renderAll()}
+function renderAll(){renderStats();renderStudents();renderAttendance();renderHistory();$('studentCountLabel').textContent=state.students.length+' mahasiswa'}
+function renderStats(){const s=currentSession();const records=s?s.records||{}:{};const values=Object.values(records);$('statStudents').textContent=state.students.length;$('statSessions').textContent=state.sessions.length;$('statPresent').textContent=values.filter(v=>v==='present').length;$('statPending').textContent=Math.max(0,state.students.length-values.filter(v=>v&&v!=='pending').length)}
+function renderStudents(){const q=$('studentSearch').value.toLocaleLowerCase();const students=sortedStudents().filter(s=>(s.name+' '+(s.nim||'')).toLocaleLowerCase().includes(q));$('studentsTable').innerHTML=students.length?'<table><thead><tr><th>No.</th><th>Nama mahasiswa</th><th>NIM</th><th>Aksi</th></tr></thead><tbody>'+students.map((s,i)=>'<tr><td class="num-cell">'+(i+1)+'</td><td class="student-name">'+esc(s.name)+'</td><td>'+esc(s.nim||'-')+'</td><td><button class="btn danger" data-delete-student="'+esc(s.id)+'">Hapus</button></td></tr>').join('')+'</tbody></table>':'<div class="empty">Belum ada mahasiswa yang cocok. Tambahkan nama atau ubah pencarian.</div>'}
+function renderAttendance(){const ses=currentSession(),q=$('attendanceSearch').value.toLocaleLowerCase();$('sessionSummary').textContent=ses?ses.course+' • Pertemuan '+ses.meeting+' • '+dateText(ses.date):'Pilih atau buat sesi untuk memulai.';const students=sortedStudents().filter(s=>s.name.toLocaleLowerCase().includes(q));if(!students.length){$('attendanceTable').innerHTML='<div class="empty">Belum ada mahasiswa. Tambahkan daftar melalui menu Mahasiswa.</div>';return}if(!ses){$('attendanceTable').innerHTML='<div class="empty">Buat atau buka sesi perkuliahan di atas untuk menandai kehadiran.</div>';return}$('attendanceTable').innerHTML='<table><thead><tr><th>No.</th><th>Nama mahasiswa</th><th>NIM</th><th>Status kehadiran</th></tr></thead><tbody>'+students.map((s,i)=>{const st=(ses.records||{})[s.id]||'pending';return '<tr><td class="num-cell">'+(i+1)+'</td><td class="student-name">'+esc(s.name)+'</td><td>'+esc(s.nim||'-')+'</td><td><select class="status-select" data-status-id="'+esc(s.id)+'" aria-label="Status '+esc(s.name)+'"><option value="pending" '+(st==='pending'?'selected':'')+'>Belum ditandai</option><option value="present" '+(st==='present'?'selected':'')+'>Hadir</option><option value="sick" '+(st==='sick'?'selected':'')+'>Sakit</option><option value="permission" '+(st==='permission'?'selected':'')+'>Izin</option><option value="absent" '+(st==='absent'?'selected':'')+'>Alpa</option></select></td></tr>'}).join('')+'</tbody></table>'}
+function renderHistory(){const list=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('historyTable').innerHTML=list.length?'<table><thead><tr><th>Tanggal</th><th>Mata kuliah</th><th>Pertemuan</th><th>Dosen</th><th>Hadir</th><th>Aksi</th></tr></thead><tbody>'+list.map(s=>{const vals=Object.values(s.records||{});return '<tr><td>'+esc(dateText(s.date))+'</td><td class="student-name">'+esc(s.course)+'</td><td>'+esc(s.meeting)+'</td><td>'+esc(s.lecturer||'-')+'</td><td>'+vals.filter(v=>v==='present').length+'/'+state.students.length+'</td><td><div class="actions"><button class="btn" data-open-session="'+esc(s.id)+'">Buka</button><button class="btn" data-export-session="'+esc(s.id)+'">CSV</button><button class="btn danger" data-delete-session="'+esc(s.id)+'">Hapus</button></div></td></tr>'}).join('')+'</tbody></table>':'<div class="empty">Belum ada riwayat sesi perkuliahan.</div>'}
+function addStudent(name,nim){name=String(name||'').trim();nim=String(nim||'').trim();if(!name)return false;if(state.students.some(s=>s.name.toLocaleLowerCase()===name.toLocaleLowerCase()&&(s.nim||'')===nim))return false;state.students.push({id:id(),name,nim});state.sessions.forEach(s=>{s.records=s.records||{}});return true}
+function createSession(){const course=$('courseInput').value.trim(),date=$('dateInput').value||localDate(),meeting=$('meetingInput').value||'1',lecturer=$('lecturerInput').value.trim();if(!course){notify('Isi nama mata kuliah terlebih dahulu.');$('courseInput').focus();return}let existing=state.sessions.find(s=>s.course.toLocaleLowerCase()===course.toLocaleLowerCase()&&s.date===date&&String(s.meeting)===String(meeting));if(existing){state.activeSessionId=existing.id;notify('Sesi yang sama dibuka kembali.')}else{const session={id:id(),course,date,meeting,lecturer,records:{},createdAt:new Date().toISOString()};state.sessions.push(session);state.activeSessionId=session.id;notify('Sesi perkuliahan dibuat.')}save();renderAll()}
+function exportSession(s){if(!s)return;const rows=[['Tanggal','Mata Kuliah','Pertemuan','Dosen','No','NIM','Nama Mahasiswa','Status']];sortedStudents().forEach((st,i)=>rows.push([s.date,s.course,s.meeting,s.lecturer||'',i+1,st.nim||'',st.name,statusLabel((s.records||{})[st.id]||'pending')]));download('absensi-'+s.date+'-'+s.course.replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.csv',rows.map(r=>r.map(csvCell).join(',')).join('\r\n'))}
+function exportAll(){const rows=[['Tanggal','Mata Kuliah','Pertemuan','Dosen','No','NIM','Nama Mahasiswa','Status']];[...state.sessions].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(s=>sortedStudents().forEach((st,i)=>rows.push([s.date,s.course,s.meeting,s.lecturer||'',i+1,st.nim||'',st.name,statusLabel((s.records||{})[st.id]||'pending')])));download('rekap-absensi-lengkap.csv',rows.map(r=>r.map(csvCell).join(',')).join('\r\n'))}
+$('loginBtn').addEventListener('click',()=>{if($('pinInput').value===String(state.pin||'1234'))showApp();else $('loginError').textContent='PIN tidak sesuai. Coba lagi.'});
+$('pinInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('logoutBtn').addEventListener('click',showLogin);
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+$('newSessionBtn').addEventListener('click',createSession);
+$('saveSessionBtn').addEventListener('click',()=>{if(!currentSession()){notify('Buat atau buka sesi terlebih dahulu.');return}save();renderAll();notify('Absensi tersimpan di browser.')});
+$('markAllBtn').addEventListener('click',()=>{const s=currentSession();if(!s){notify('Buat atau buka sesi terlebih dahulu.');return}if(!confirm('Tandai semua mahasiswa sebagai hadir?'))return;s.records=s.records||{};state.students.forEach(st=>s.records[st.id]='present');save();renderAll();notify('Semua mahasiswa ditandai hadir.')});
+$('addStudentBtn').addEventListener('click',()=>{const name=$('studentNameInput').value,nim=$('studentIdInput').value;if(!name.trim()){notify('Masukkan nama mahasiswa.');return}if(!addStudent(name,nim)){notify('Mahasiswa sudah terdaftar atau data tidak valid.');return}save();$('studentNameInput').value='';$('studentIdInput').value='';renderAll();notify('Mahasiswa ditambahkan.')});
+$('studentNameInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('addStudentBtn').click()});
+$('importStudentsBtn').addEventListener('click',()=>{const lines=$('bulkStudents').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);let added=0;lines.forEach(line=>{const parts=line.split(',');let nim='',name=line;if(parts.length>1){nim=parts.shift().trim();name=parts.join(',').trim()}if(addStudent(name,nim))added++});save();$('bulkStudents').value='';renderAll();notify(added+' mahasiswa berhasil ditambahkan.')});
+$('studentFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const text=await file.text();let added=0;text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).forEach((line,i)=>{if(i===0&&/nama|name|nim/i.test(line))return;const p=line.split(',').map(x=>x.trim());if(p.length>1){if(addStudent(p.slice(1).join(',').replace(/^"|"$/g,''),p[0].replace(/^"|"$/g,'')))added++}else if(addStudent(line.replace(/^"|"$/g,''),''))added++});save();renderAll();e.target.value='';notify(added+' mahasiswa diimpor.')});
+$('downloadTemplateBtn').addEventListener('click',()=>download('template-mahasiswa.csv','NIM,Nama Mahasiswa\r\n,Contoh Nama\r\n'));
+$('studentSearch').addEventListener('input',renderStudents);$('attendanceSearch').addEventListener('input',renderAttendance);
+$('studentsTable').addEventListener('click',e=>{const b=e.target.closest('[data-delete-student]');if(!b)return;const st=state.students.find(s=>s.id===b.dataset.deleteStudent);if(!st||!confirm('Hapus mahasiswa '+st.name+'? Riwayat absensinya juga akan kehilangan data mahasiswa ini.'))return;state.students=state.students.filter(s=>s.id!==st.id);state.sessions.forEach(s=>{if(s.records)delete s.records[st.id]});save();renderAll();notify('Mahasiswa dihapus.')});
+$('attendanceTable').addEventListener('change',e=>{const sel=e.target.closest('[data-status-id]');if(!sel)return;const s=currentSession();if(!s)return;s.records=s.records||{};s.records[sel.dataset.statusId]=sel.value;save();renderStats()});
+$('historyTable').addEventListener('click',e=>{const open=e.target.closest('[data-open-session]'),exp=e.target.closest('[data-export-session]'),del=e.target.closest('[data-delete-session]');if(open){state.activeSessionId=open.dataset.openSession;const s=currentSession();if(s){$('courseInput').value=s.course;$('dateInput').value=s.date;$('meetingInput').value=s.meeting;$('lecturerInput').value=s.lecturer||''}switchTab('attendance')}if(exp)exportSession(state.sessions.find(s=>s.id===exp.dataset.exportSession));if(del){const s=state.sessions.find(s=>s.id===del.dataset.deleteSession);if(s&&confirm('Hapus sesi '+s.course+' tanggal '+s.date+'?')){state.sessions=state.sessions.filter(x=>x.id!==s.id);if(state.activeSessionId===s.id)state.activeSessionId=null;save();renderAll();notify('Sesi dihapus.')}}});
+$('exportAllBtn').addEventListener('click',exportAll);$('exportHistoryBtn').addEventListener('click',exportAll);
+$('changePinBtn').addEventListener('click',()=>{const old=$('oldPin').value,n=$('newPin').value,c=$('confirmPin').value;if(old!==String(state.pin||'1234')){notify('PIN saat ini salah.');return}if(!/^\d{4,12}$/.test(n)){notify('PIN baru harus 4–12 digit angka.');return}if(n!==c){notify('Konfirmasi PIN tidak sama.');return}state.pin=n;save();$('oldPin').value=$('newPin').value=$('confirmPin').value='';notify('PIN lokal berhasil diubah.')});
+$('backupBtn').addEventListener('click',()=>download('cadangan-absensi-'+localDate()+'.json',JSON.stringify(state,null,2),'application/json'));
+$('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!Array.isArray(x.students)||!Array.isArray(x.sessions)||!confirm('Pulihkan cadangan? Data yang ada sekarang akan diganti.'))return;state={...defaultState,...x};save();renderAll();notify('Cadangan dipulihkan.')}catch(err){notify('File cadangan tidak valid.')}finally{e.target.value=''}});
+$('clearDataBtn').addEventListener('click',()=>{if(!confirm('PERINGATAN: hapus seluruh daftar mahasiswa, sesi, dan riwayat dari browser ini? Ekspor cadangan terlebih dahulu jika diperlukan.'))return;if(!confirm('Konfirmasi sekali lagi: seluruh data lokal akan dihapus.'))return;state=structuredClone(defaultState);save();showLogin();notify('Data lokal telah dihapus.')});
+if(!state.pin)state.pin='1234';
+if(sessionStorage.getItem('stikk_an2_logged_in')==='yes')showApp();else showLogin();
+// Keep the login state for this browser tab only; it is not server authentication.
+const originalShowApp=showApp;
+showApp=function(){sessionStorage.setItem('stikk_an2_logged_in','yes');originalShowApp()};
+const originalShowLogin=showLogin;
+showLogin=function(){sessionStorage.removeItem('stikk_an2_logged_in');originalShowLogin()};
+})();
+</script>
+</body>
+</html>
