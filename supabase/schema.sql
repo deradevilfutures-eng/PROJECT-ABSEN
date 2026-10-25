@@ -20,7 +20,7 @@ create table if not exists public.student_accounts (
 );
 
 create table if not exists public.attendance_sessions (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key default gen_random_uuid()::text,
   course text not null,
   session_date date not null,
   meeting integer not null default 1 check (meeting > 0),
@@ -31,7 +31,7 @@ create table if not exists public.attendance_sessions (
 
 create table if not exists public.attendance_records (
   id uuid primary key default gen_random_uuid(),
-  session_id uuid not null references public.attendance_sessions(id) on delete cascade,
+  session_id text not null references public.attendance_sessions(id) on delete cascade,
   student_id text not null references public.students(id) on delete cascade,
   status text not null check (status in ('present','absent','permission','sick','pending')),
   updated_at timestamptz not null default now(),
