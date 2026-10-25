@@ -4,6 +4,7 @@
 - `student.html`: portal mahasiswa, hanya dapat melihat riwayat dirinya sendiri.
 - `admin-cloud.html`: panel admin cloud untuk membuat/reset PIN 4 digit secara acak.
 - `supabase/config.example.js`: contoh konfigurasi browser (URL + anon key saja).
+- `supabase/config.toml`: pengaturan validasi sesi khusus pada Edge Function.
 - `supabase/schema.sql`: tabel, RLS, dan seed 21 mahasiswa.
 - `supabase/functions/student-portal/index.ts`: backend Edge Function dengan login mahasiswa, sesi bertoken, pembatasan percobaan, riwayat pribadi, serta pengelolaan PIN oleh admin.
 - `supabase-config.js`: placeholder konfigurasi yang harus diisi sebelum portal online berfungsi.
@@ -42,11 +43,16 @@ on conflict (user_id) do update set active = true;
 ## 4. Buka portal mahasiswa
 Setelah konfigurasi dan deployment selesai, buka `student.html`. Mahasiswa memilih nama dan memasukkan PIN 4 digit. Token sesi hanya disimpan di memori tab; sesi backend berlaku 8 jam dan dihapus saat login baru untuk akun yang sama.
 
-## 5. Hubungkan absensi admin ke database
-Aplikasi lama `index.html` tetap dipertahankan. Saat ini fitur lama menyimpan sesi dan kehadiran di localStorage browser. Untuk menampilkan riwayat di portal mahasiswa, data sesi/kehadiran harus ditulis ke tabel `attendance_sessions` dan `attendance_records`. Jangan menganggap data lama otomatis tersinkron. Migrasi dan sinkronisasi admin perlu diselesaikan sebelum dipakai sebagai satu sistem produksi.
+## 5. Sinkronkan absensi lokal ke database online
+1. Login ke `index.html` pada domain GitHub Pages dan pastikan sesi serta status absensi sudah disimpan di browser tersebut.
+2. Buka `admin-cloud.html` pada domain yang sama, lalu login dengan akun admin cloud.
+3. Tekan **Sinkronkan absensi lokal** dan konfirmasi. Sesi dan catatan kehadiran yang ada di localStorage browser tersebut akan dikirim ke database online.
+4. Mahasiswa kemudian dapat login ke `student.html` untuk melihat riwayat yang telah tersinkron.
+
+**Catatan:** sinkronisasi saat ini manual; perubahan berikutnya di aplikasi lama tidak otomatis masuk cloud. Gunakan perangkat/browser yang menyimpan data lokal awal saat melakukan sinkronisasi. Data cloud yang tidak ada di localStorage tidak dihapus oleh proses ini.
 
 ## Batasan keamanan
-- PIN 4 digit hanya memiliki 10.000 kemungkinan. Backend membatasi percobaan berulang berdasarkan mahasiswa + fingerprint IP dan mengunci percobaan setelah 8 kali dalam 15 menit. Ini bukan pengganti MFA untuk admin.
+- PIN 4 digit hanya memiliki 10.000 kemungkinan. Backend membatasi percobaan berdasarkan mahasiswa + fingerprint IP (8 kali/15 menit) dan jumlah percobaan per akun (30 kali/15 menit). Header IP bukan sinyal anti-penyalahgunaan yang sempurna; untuk produksi, tambahkan CAPTCHA atau proteksi bot bila diperlukan.
 - PIN di-hash dengan bcrypt cost 12; tidak disimpan sebagai teks biasa.
 - RLS aktif dan tidak ada policy akses langsung untuk anon/authenticated; fungsi backend menjadi perantara.
 - Login mahasiswa hanya memberikan riwayat untuk student_id yang terikat pada token sesi server.
