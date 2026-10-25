@@ -38,7 +38,7 @@ values ('UUID_USER_ADMIN_ANDA', true)
 on conflict (user_id) do update set active = true;
 ```
 4. Buka `admin-cloud.html` setelah GitHub Pages aktif, login menggunakan email/password admin tersebut.
-5. Gunakan **Buat PIN** pada setiap mahasiswa. PIN ditampilkan satu kali. Sampaikan langsung secara pribadi. Jika PIN hilang, reset PIN lama tidak berlaku lagi.
+5. Gunakan **Buat PIN mahasiswa yang belum punya** untuk membuat PIN unik 4 digit bagi semua akun yang belum memiliki PIN, atau gunakan tombol per mahasiswa. Daftar PIN yang baru dibuat dapat diunduh sekali sebagai CSV rahasia; simpan dengan aman dan bagikan secara pribadi. Jika PIN hilang, reset PIN lama tidak berlaku lagi.
 
 ## 4. Buka portal mahasiswa
 Setelah konfigurasi dan deployment selesai, buka `student.html`. Mahasiswa memilih nama dan memasukkan PIN 4 digit. Token sesi hanya disimpan di memori tab; sesi backend berlaku 8 jam dan dihapus saat login baru untuk akun yang sama.
