@@ -51,29 +51,7 @@ Deno.serve(async (req) => {
       return json({ students: students.map(s => ({ id: s.id, full_name: s.full_name })) });
     }
     if (action === "student-login") {
-      if (action === "admin-sync") {
-        const input = body.state;
-        if (!input || !Array.isArray(input.sessions) || input.sessions.length > 500) return json({ error: "Data absensi tidak valid atau terlalu banyak sesi." }, 400);
-        const known = new Set((await listStudents()).map(s => s.id));
-        let sessionCount = 0, recordCount = 0;
-        for (const source of input.sessions) {
-          const sid = String(source.id || "");
-          const course = String(source.course || "").trim().slice(0, 180);
-          const date = String(source.date || "");
-          const meeting = Number.parseInt(String(source.meeting || "1"), 10);
-          if (!sid || sid.length > 100 || !course || !/^\\d{4}-\\d{2}-\\d{2}$/.test(date) || !Number.isInteger(meeting) || meeting < 1 || meeting > 1000) continue;
-          const { error: sessionError } = await db.from("attendance_sessions").upsert({ id: sid, course, session_date: date, meeting, lecturer: String(source.lecturer || "").slice(0, 180), created_by: user.id }, { onConflict: "id" });
-          if (sessionError) throw sessionError;
-          sessionCount++;
-          const records = Object.entries(source.records || {}).filter(([studentId, status]) => known.has(studentId) && ["present","absent","permission","sick","pending"].includes(String(status))).map(([student_id, status]) => ({ session_id: sid, student_id, status: String(status), updated_at: new Date().toISOString() }));
-          if (records.length) {
-            const { error: recordError } = await db.from("attendance_records").upsert(records, { onConflict: "session_id,student_id" });
-            if (recordError) throw recordError;
-            recordCount += records.length;
-          }
-        }
-        return json({ success: true, sessions_synced: sessionCount, records_synced: recordCount });
-      }
+      if (!pinPepper) return json({ error: "Konfigurasi keamanan PIN belum lengkap di server." }, 503);
       const studentId = String(body.student_id || "");
       const pin = String(body.pin || "");
       if (!/^student-\d{3}$/.test(studentId) || !/^\d{4}$/.test(pin)) return json({ error: "Nama atau PIN tidak sesuai." }, 400);
@@ -117,6 +95,30 @@ Deno.serve(async (req) => {
         const hasPin = new Set((accounts || []).map(a => a.student_id));
         return json({ students: students.map(s => ({ ...s, has_pin: hasPin.has(s.id) })) });
       }
+      if (action === "admin-sync") {
+        const input = body.state;
+        if (!input || !Array.isArray(input.sessions) || input.sessions.length > 500) return json({ error: "Data absensi tidak valid atau terlalu banyak sesi." }, 400);
+        const known = new Set((await listStudents()).map(s => s.id));
+        let sessionCount = 0, recordCount = 0;
+        for (const source of input.sessions) {
+          const sid = String(source.id || "");
+          const course = String(source.course || "").trim().slice(0, 180);
+          const date = String(source.date || "");
+          const meeting = Number.parseInt(String(source.meeting || "1"), 10);
+          if (!sid || sid.length > 100 || !course || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isInteger(meeting) || meeting < 1 || meeting > 1000) continue;
+          const { error: sessionError } = await db.from("attendance_sessions").upsert({ id: sid, course, session_date: date, meeting, lecturer: String(source.lecturer || "").slice(0, 180), created_by: user.id }, { onConflict: "id" });
+          if (sessionError) throw sessionError;
+          sessionCount++;
+          const records = Object.entries(source.records || {}).filter(([studentId, status]) => known.has(studentId) && ["present","absent","permission","sick","pending"].includes(String(status))).map(([student_id, status]) => ({ session_id: sid, student_id, status: String(status), updated_at: new Date().toISOString() }));
+          if (records.length) {
+            const { error: recordError } = await db.from("attendance_records").upsert(records, { onConflict: "session_id,student_id" });
+            if (recordError) throw recordError;
+            recordCount += records.length;
+          }
+        }
+        return json({ success: true, sessions_synced: sessionCount, records_synced: recordCount });
+      }
+      if (!pinPepper) return json({ error: "Konfigurasi keamanan PIN belum lengkap di server." }, 503);
       const studentId = String(body.student_id || "");
       if (!/^student-\d{3}$/.test(studentId)) return json({ error: "Mahasiswa tidak valid." }, 400);
       const { data: student } = await db.from("students").select("id,full_name").eq("id", studentId).eq("active", true).maybeSingle();
