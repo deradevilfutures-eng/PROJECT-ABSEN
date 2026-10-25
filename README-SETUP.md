@@ -24,7 +24,7 @@ Pasang Supabase CLI, login, lalu tautkan project:
 supabase login
 supabase link --project-ref PROJECT_REF_ANDA
 supabase functions deploy student-portal
-supabase secrets set SUPABASE_ANON_KEY=ANON_KEY_ANDA RATE_LIMIT_SALT="GANTI_DENGAN_RANDOM_SECRET_PANJANG"
+supabase secrets set SUPABASE_ANON_KEY=ANON_KEY_ANDA PIN_PEPPER="GANTI_DENGAN_RANDOM_SECRET_RAHASIA_PANJANG" RATE_LIMIT_SALT="GANTI_DENGAN_RANDOM_SECRET_PANJANG"
 ```
 Supabase menyediakan `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY` sebagai environment bawaan untuk Edge Functions. Pastikan fungsi berjalan dengan service role hanya di sisi server. Jangan menambahkan service role ke file front-end.
 
@@ -53,7 +53,7 @@ Setelah konfigurasi dan deployment selesai, buka `student.html`. Mahasiswa memil
 
 ## Batasan keamanan
 - PIN 4 digit hanya memiliki 10.000 kemungkinan. Backend membatasi percobaan berdasarkan mahasiswa + fingerprint IP (8 kali/15 menit) dan jumlah percobaan per akun (30 kali/15 menit). Header IP bukan sinyal anti-penyalahgunaan yang sempurna; untuk produksi, tambahkan CAPTCHA atau proteksi bot bila diperlukan.
-- PIN di-hash dengan bcrypt cost 12; tidak disimpan sebagai teks biasa.
+- PIN di-hash dengan bcrypt cost 12 dan pepper rahasia server; PIN tidak disimpan sebagai teks biasa. Jangan kehilangan `PIN_PEPPER`, dan jangan masukkan secret itu ke GitHub.
 - RLS aktif dan tidak ada policy akses langsung untuk anon/authenticated; fungsi backend menjadi perantara.
 - Login mahasiswa hanya memberikan riwayat untuk student_id yang terikat pada token sesi server.
 - Admin cloud harus menggunakan Supabase Auth dan tercatat di `admin_users`.
